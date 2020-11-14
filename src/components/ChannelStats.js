@@ -12,6 +12,7 @@ const ChannelStats = props => {
   const [channelId, setChannelId] = useState("");
 
   const [rowData, setRowData] = useState([]);
+  const [loder,setLoader] = useState(false);
 
   useEffect(() => {
 
@@ -21,12 +22,13 @@ const ChannelStats = props => {
     //setCurrentTutorial({ ...currentTutorial, [name]: value });
     setChannelId(event.target.value);
   };
-// localhost:8085/getChannelStats/
+// htttp://localhost:8085/getChannelStats/
 // https://st-service.herokuapp.com/getChannelStats/
 
 
   const getChannelStats = () => {
-             axios.get('https://st-service.herokuapp.com/getChannelStats/'+channelId, {
+    setLoader(true);
+             axios.get('http://localhost:8085/getChannelStats/'+channelId, {
                   headers: {
                     "Access-Control-Allow-Origin": "*"
                   },
@@ -34,6 +36,7 @@ const ChannelStats = props => {
                  }).then(response => {
                  console.log(response.data);
                  setRowData(response.data);
+                 setLoader(false);
                  });
    };
 
@@ -49,7 +52,10 @@ const ChannelStats = props => {
 } ;*/
 
 
-
+var timeValueGetter = function (params) {
+  console.log("from timeValueGetter >>>>>");
+  return params.data.date.year +':' + params.data.date.month;
+};
 
 
   return (
@@ -74,6 +80,7 @@ const ChannelStats = props => {
                     Channel Stats
          </button>
         </div>
+        {loder && <div className="loader"></div>}
           <div className="ag-theme-alpine" style={ { height: 400, width: 1000 } }>
             <AgGridReact
                 rowData={rowData}>
@@ -81,7 +88,7 @@ const ChannelStats = props => {
                 <AgGridColumn field="viewCount"></AgGridColumn>
                 <AgGridColumn field="videoCount"></AgGridColumn>
                 <AgGridColumn field="subscriberCount"></AgGridColumn>
-                <AgGridColumn headerName="Time" field="timestamp"></AgGridColumn>
+                <AgGridColumn filed="timestamp"></AgGridColumn>
             </AgGridReact>
         </div>
 

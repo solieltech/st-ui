@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from "react";
 import YTService from "../services/YTService";
 import axios from "axios";
+import ReactExport from "react-data-export";
+import { loadProgressBar } from 'axios-progress-bar'
+
+
 
 const VideoComments = props => {
   const [videoId, setVideoId] = useState("");
+  const [commentData,setCommentData] =  useState([]);
+  const [canDownload,setCanDownload] = useState(false);
+  const [loder,setLoader] = useState(false);
 
   useEffect(() => {
 
   }, []);
+
+  const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
   const handleInputChange = event => {
     setVideoId(event.target.value);
@@ -17,12 +28,17 @@ const VideoComments = props => {
 
 
   const getVideoComments = () => {
-             axios.get('https://st-service.herokuapp.com/getChannelStats/'+videoId, {
+    setLoader(true);
+             axios.get('https://st-service.herokuapp.com/getVideoComments/'+videoId, {
                   headers: {
                     "Access-Control-Allow-Origin": "*"
                   }
                  }).then(response => {
+                  loadProgressBar();
                  console.log(response.data);
+                 setCommentData(response.data);
+                 setCanDownload(true);
+                 setLoader(false);
                  
                  });
    };
@@ -64,6 +80,24 @@ const VideoComments = props => {
                     Video Comments
          </button>
         </div>
+
+       {loder && <div className="loader"></div>}
+
+       { canDownload && <ExcelFile>
+                <ExcelSheet data={commentData} name="Comments">
+                    <ExcelColumn label="Name" value="name"/>
+                    <ExcelColumn label="Comment" value="comment"/>
+                    <ExcelColumn label="LikeCount" value="likeCount"/>
+                    <ExcelColumn label="TotalReplyCount" value="totalReplyCount"/>
+                    <ExcelColumn label="PublishedAt" value="publishedAt"/>
+                    <ExcelColumn label="UpdatedAt" value="updatedAt"/>
+                    <ExcelColumn label="AuthorChannelUrl" value="authorChannelUrl"/>
+                    
+                </ExcelSheet>
+        </ExcelFile>
+    } 
+
+
       </div>
 );
 }
