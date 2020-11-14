@@ -1,56 +1,54 @@
 import React, { useState, useEffect } from "react";
-import TutorialDataService from "../services/TutorialService";
 import YTService from "../services/YTService";
 import axios from "axios";
 
+import { AgGridColumn, AgGridReact } from 'ag-grid-react';
+
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+
 
 const ChannelStats = props => {
-  const initialTutorialState = {
-    id: null,
-    title: "",
-    description: "",
-    published: false
-  };
-  const [currentTutorial, setCurrentTutorial] = useState(initialTutorialState);
-  const [message, setMessage] = useState("");
   const [channelId, setChannelId] = useState("");
 
-  const [videoCount, setVideoCount] = useState("0");
-  const [subscriberCount, setSubscriberCount] = useState("0");
-  const [viewCount, setViewCount] = useState("0");
+  const [rowData, setRowData] = useState([]);
 
   useEffect(() => {
 
   }, []);
 
   const handleInputChange = event => {
-    const { name, value } = event.target;
     //setCurrentTutorial({ ...currentTutorial, [name]: value });
     setChannelId(event.target.value);
   };
+// localhost:8085/getChannelStats/
+// https://st-service.herokuapp.com/getChannelStats/
+
 
   const getChannelStats = () => {
-      /*YTService.getAll(channelId)
-            .then(response => {
-              console.log(response.data);
-            })
-            .catch(e => {
-              console.log(e);
-            });*/
-
              axios.get('https://st-service.herokuapp.com/getChannelStats/'+channelId, {
                   headers: {
-                       'Access-Control-Allow-Origin': true
+                    "Access-Control-Allow-Origin": "*"
                   },
                 responseType: 'json',
                  }).then(response => {
-                 //console.log(response.data.items[0].statistics.videoCount);
-                 setVideoCount(response.data.items[0].statistics.videoCount);
-                 setViewCount(response.data.items[0].statistics.viewCount);
-                 setSubscriberCount(response.data.items[0].statistics.subscriberCount);
-                });
-
+                 console.log(response.data);
+                 setRowData(response.data);
+                 });
    };
+
+/*const getChannelStats = () => {
+    YTService.getChannelStats(channelId)
+    .then(response => {
+      console.log(response.data);
+        setRowData(response.data);
+    })
+    .catch(e => {
+      console.log(e);
+    });
+} ;*/
+
+
 
 
 
@@ -72,14 +70,21 @@ const ChannelStats = props => {
               />
             </div>
           </form>
-        </div>
-
-         <button className="badge badge mr-2" onClick={getChannelStats}>
+          <button className="badge badge mr-2" onClick={getChannelStats}>
                     Channel Stats
          </button>
-         Video Count is: { videoCount &&   videoCount } <br></br>
-         View  Count is: { viewCount &&   viewCount }<br></br>
-          Subscriber  Count is: { subscriberCount &&   subscriberCount }
+        </div>
+          <div className="ag-theme-alpine" style={ { height: 400, width: 1000 } }>
+            <AgGridReact
+                rowData={rowData}>
+                <AgGridColumn field="channelId"></AgGridColumn>
+                <AgGridColumn field="viewCount"></AgGridColumn>
+                <AgGridColumn field="videoCount"></AgGridColumn>
+                <AgGridColumn field="subscriberCount"></AgGridColumn>
+                <AgGridColumn headerName="Time" field="timestamp"></AgGridColumn>
+            </AgGridReact>
+        </div>
+
 
     </div>
 );

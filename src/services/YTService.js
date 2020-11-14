@@ -1,6 +1,6 @@
 import http from "../http-common";
 
-const getAll = (channelId:string) => {
+const getChannelStats = (channelId:string) => {
   return http.get("/getChannelStats/"+channelId);
 };
 
@@ -29,7 +29,7 @@ const findByTitle = title => {
 };
 
 export default {
-  getAll,
+  getChannelStats,
   get,
   create,
   update,

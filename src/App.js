@@ -7,6 +7,7 @@ import AddTutorial from "./components/AddTutorial";
 import Tutorial from "./components/Tutorial";
 import ChannelStats from "./components/ChannelStats";
 import TutorialsList from "./components/TutorialsList";
+import VideoComments from "./components/VideoComments";
 
 function App() {
   return (
@@ -14,23 +15,18 @@ function App() {
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
           <a href="/tutorials" className="navbar-brand">
-            bezKoder
+            Suspect-Tracker
           </a>
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
-              <Link to={"/tutorials"} className="nav-link">
-                Tutorials
+              <Link to={"/st/yt/videoComments"} className="nav-link">
+                Video Comments
               </Link>
             </li>
             <li className="nav-item">
-              <Link to={"/add"} className="nav-link">
-                Add
+              <Link to={"/st/yt/channelStats"} className="nav-link">
+                Channel Stats
               </Link>
-            </li>
-            <li className="nav-item">
-                          <Link to={"/st/yt/channelStats"} className="nav-link">
-                            Channel Stats
-                          </Link>
             </li>
           </div>
         </nav>
@@ -41,6 +37,7 @@ function App() {
             <Route exact path="/add" component={AddTutorial} />
             <Route path="/tutorials/:id" component={Tutorial} />
             <Route path="/st/yt/channelStats" component={ChannelStats} />
+            <Route path="/st/yt/videoComments" component={VideoComments} />
           </Switch>
         </div>
       </div>
