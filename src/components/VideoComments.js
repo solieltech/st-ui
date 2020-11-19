@@ -92,7 +92,6 @@ const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
                     <ExcelColumn label="PublishedAt" value="publishedAt"/>
                     <ExcelColumn label="UpdatedAt" value="updatedAt"/>
                     <ExcelColumn label="AuthorChannelUrl" value="authorChannelUrl"/>
-                    
                 </ExcelSheet>
         </ExcelFile>
     } 

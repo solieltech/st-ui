@@ -22,7 +22,7 @@ const ChannelStats = props => {
     //setCurrentTutorial({ ...currentTutorial, [name]: value });
     setChannelId(event.target.value);
   };
-// htttp://localhost:8085/getChannelStats/
+// http://localhost:8085/getChannelStats/
 // https://st-service.herokuapp.com/getChannelStats/
 
 
@@ -32,7 +32,7 @@ const ChannelStats = props => {
                   headers: {
                     "Access-Control-Allow-Origin": "*"
                   },
-                responseType: 'json',
+                responseType: 'application/json; charset=utf-8',
                  }).then(response => {
                  console.log(response.data);
                  setRowData(response.data);
@@ -52,10 +52,12 @@ const ChannelStats = props => {
 } ;*/
 
 
-var timeValueGetter = function (params) {
-  console.log("from timeValueGetter >>>>>");
-  return params.data.date.year +':' + params.data.date.month;
-};
+function formatDateValue(params){ 
+  console.log("from formatDateValue");
+  console.log(params.data.timestamp);
+  return params.data.timestamp;
+}
+
 
 
   return (
@@ -82,13 +84,12 @@ var timeValueGetter = function (params) {
         </div>
         {loder && <div className="loader"></div>}
           <div className="ag-theme-alpine" style={ { height: 400, width: 1000 } }>
-            <AgGridReact
-                rowData={rowData}>
+            <AgGridReact rowData={rowData}> 
                 <AgGridColumn field="channelId"></AgGridColumn>
                 <AgGridColumn field="viewCount"></AgGridColumn>
                 <AgGridColumn field="videoCount"></AgGridColumn>
                 <AgGridColumn field="subscriberCount"></AgGridColumn>
-                <AgGridColumn filed="timestamp"></AgGridColumn>
+                <AgGridColumn headerName= 'Timestamp' filed="timestamp" cellRenderer={formatDateValue} ></AgGridColumn>
             </AgGridReact>
         </div>
 
