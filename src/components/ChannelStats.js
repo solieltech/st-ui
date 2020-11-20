@@ -35,7 +35,7 @@ const ChannelStats = props => {
     setLoader(true);
 
 
-    axios.get('hhttps://st-service.herokuapp.com/channelDetails/'+channelId, {
+    axios.get('https://st-service.herokuapp.com/channelDetails/'+channelId, {
       headers: {
         "Access-Control-Allow-Origin": "*"
       },
