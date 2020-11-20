@@ -10,9 +10,14 @@ import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
 const ChannelStats = props => {
   const [channelId, setChannelId] = useState("");
-
   const [rowData, setRowData] = useState([]);
   const [loder,setLoader] = useState(false);
+
+  const [channelDetails,setChannelDetails] = useState(false);
+  const [title,setTitle] = useState("");
+  const [description,setDescription] = useState("");
+  const [publishedAt,setPulishedAt] = useState("");
+
 
   useEffect(() => {
 
@@ -28,6 +33,22 @@ const ChannelStats = props => {
 
   const getChannelStats = () => {
     setLoader(true);
+
+
+    axios.get('hhttps://st-service.herokuapp.com/channelDetails/'+channelId, {
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      },
+    responseType: 'application/json; charset=utf-8',
+     }).then(response => {
+     console.log(response.data);
+     //setLoader(false);
+     setTitle(response.data.title);
+     setDescription(response.data.description);
+     setPulishedAt(response.data.publishedAt);
+     });
+
+
              axios.get('https://st-service.herokuapp.com/getChannelStats/'+channelId, {
                   headers: {
                     "Access-Control-Allow-Origin": "*"
@@ -37,6 +58,7 @@ const ChannelStats = props => {
                  console.log(response.data);
                  setRowData(response.data);
                  setLoader(false);
+                 setChannelDetails(true);
                  });
    };
 
@@ -83,6 +105,12 @@ function formatDateValue(params){
          </button>
         </div>
         {loder && <div className="loader"></div>}
+        {channelDetails && <div>
+          <span><b>Title:</b> {title}</span> <br />
+        <span><b>Description: </b>{description}</span>  <br />
+        <span><b>Channel PublishedAt: </b>{publishedAt}</span> 
+        </div>
+        }      
           <div className="ag-theme-alpine" style={ { height: 400, width: 1000 } }>
             <AgGridReact rowData={rowData}> 
                 <AgGridColumn field="channelId"></AgGridColumn>
